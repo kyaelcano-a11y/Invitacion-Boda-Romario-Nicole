@@ -6,7 +6,7 @@
 <title>Romario &amp; Nicole · 21 de Noviembre 2026</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Great+Vibes&family=Montserrat:wght@400;500;600&family=Pinyon+Script&family=Forum&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Mrs+Saint+Delafield&family=Montserrat:wght@400;500;600&family=Forum&display=swap" rel="stylesheet">
 <style>
   :root{
     --pearl: #FFFDF8;
@@ -58,14 +58,13 @@
   #envelope-screen.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
 
   .env-label{
-    font-family:'Montserrat',sans-serif;
-    letter-spacing:.32em;
-    font-size:11px;
-    text-transform:uppercase;
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:2.1rem;
+    letter-spacing:.02em;
     color:var(--gold-deep);
-    opacity:.85;
+    opacity:.9;
     text-align:center;
-    margin-bottom:30px;
+    margin-bottom:22px;
   }
 
   /* Truco de aspect-ratio robusto (funciona en todos los navegadores móviles) */
@@ -88,6 +87,33 @@
     position:absolute; inset:0;
     background:linear-gradient(160deg, var(--champagne) 0%, var(--champagne-deep) 100%);
     border-radius:5px;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.5), inset 0 0 40px rgba(255,255,255,.25);
+  }
+  .env-frame{
+    position:absolute; inset:9px;
+    border:1px solid rgba(140,107,46,.55);
+    border-radius:3px;
+    pointer-events:none;
+    z-index:2;
+  }
+  .env-corner{
+    position:absolute;
+    width:16px; height:16px;
+    border:1px solid var(--gold-deep);
+    opacity:.75;
+    z-index:2;
+    pointer-events:none;
+  }
+  .env-corner.tl{ top:9px; left:9px; border-right:none; border-bottom:none; }
+  .env-corner.tr{ top:9px; right:9px; border-left:none; border-bottom:none; }
+  .env-corner.bl{ bottom:9px; left:9px; border-right:none; border-top:none; }
+  .env-corner.br{ bottom:9px; right:9px; border-left:none; border-top:none; }
+  .env-glow{
+    position:absolute; top:50%; left:50%;
+    width:60%; aspect-ratio:1/1;
+    transform:translate(-50%,-50%);
+    background:radial-gradient(circle, rgba(255,253,248,.9) 0%, rgba(255,253,248,0) 70%);
+    z-index:2; pointer-events:none;
   }
   .env-flap{
     position:absolute; top:0; left:0; right:0; height:100%;
@@ -101,29 +127,23 @@
   .envelope-frame.open .env-flap{ transform:rotateX(178deg); }
   .seal{
     position:absolute; top:50%; left:50%;
-    width:19%; aspect-ratio:1/1;
-    min-width:44px; min-height:44px;
-    background:radial-gradient(circle at 35% 30%, var(--gold-light), var(--gold) 75%);
-    border-radius:50%;
+    width:54%;
     transform:translate(-50%,-50%);
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Great Vibes',cursive;
-    font-size:22px;
-    color:var(--ink);
-    box-shadow:0 3px 10px rgba(140,107,46,.35), inset 0 1px 2px rgba(255,255,255,.5);
     z-index:3;
     transition:opacity .4s ease, transform .5s ease;
+  }
+  .seal img{
+    width:100%; height:auto; display:block;
   }
   .envelope-frame.open .seal{ opacity:0; transform:translate(-50%,-50%) scale(.4); }
 
   .env-cta{
     margin-top:26px;
-    font-family:'Montserrat',sans-serif;
-    font-size:11px;
-    letter-spacing:.26em;
-    text-transform:uppercase;
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:2rem;
+    letter-spacing:.02em;
     color:var(--gold-deep);
-    opacity:.85;
+    opacity:.9;
     text-align:center;
     animation:pulse 2.6s ease-in-out infinite;
   }
@@ -144,15 +164,16 @@
   #hero{ padding-top:88px; padding-bottom:48px; background:var(--pearl); }
   .hero-pre{
     font-style:italic;
-    font-size:1.05rem;
+    font-size:1.02rem;
+    line-height:1.6;
     color:var(--ink-soft);
     margin-bottom:8px;
   }
   .hero-names{
-    font-family:'Pinyon Script', cursive;
+    font-family:'Mrs Saint Delafield', cursive;
     font-weight:400;
-    font-size:clamp(3.2rem, 14vw, 5.6rem);
-    line-height:1.15;
+    font-size:clamp(4rem, 18vw, 7.2rem);
+    line-height:1.25;
     color:var(--ink);
     margin:0;
     letter-spacing:.01em;
@@ -204,6 +225,34 @@
   }
   .gallery-grid img{ width:100%; height:100%; object-fit:cover; }
 
+  /* GALERÍA PRE-BODA */
+  #preboda{ background:var(--paper); }
+  .preboda-title{
+    font-family:'Forum', serif;
+    font-weight:400;
+    font-size:clamp(1.5rem,5vw,2rem);
+    color:var(--ink);
+    margin:0;
+  }
+  .preboda-cite{
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:1.5rem;
+    color:var(--gold-deep);
+    margin-top:2px;
+  }
+  .preboda-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    margin-top:30px;
+  }
+  .pb-frame{
+    aspect-ratio:1/1;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--pearl);
+    box-shadow:0 0 0 1px var(--champagne-deep);
+  }
+  .pb-frame img{ width:100%; height:100%; object-fit:cover; display:block; }
+
   /* COUNTDOWN */
   #countdown{ background:linear-gradient(160deg, var(--champagne) 0%, var(--champagne-deep) 100%); color:var(--ink); }
   #countdown .eyebrow{ color:var(--gold-deep); }
@@ -231,6 +280,52 @@
     color:var(--ink); opacity:.6; margin-top:8px;
   }
 
+  /* MINI CALENDARIO */
+  #minical{ background:var(--pearl); }
+  .minical-card{
+    max-width:340px; margin:34px auto 0;
+    background:var(--paper);
+    border:1px solid var(--champagne-deep);
+    border-radius:12px;
+    padding:26px 22px 30px;
+    box-shadow:0 10px 26px rgba(180,144,63,.14);
+  }
+  .minical-month{
+    font-family:'Mrs Saint Delafield', cursive;
+    font-size:2.3rem;
+    color:var(--gold-deep);
+    margin-bottom:14px;
+  }
+  .minical-grid{
+    display:grid; grid-template-columns:repeat(7,1fr);
+    gap:6px 2px;
+  }
+  .minical-grid .dow{
+    font-family:'Montserrat',sans-serif;
+    font-size:.6rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); padding-bottom:4px;
+  }
+  .minical-grid .day{
+    font-size:.92rem; color:var(--ink);
+    padding:5px 0; border-radius:50%;
+  }
+  .minical-grid .day.highlight{
+    background:var(--gold);
+    color:#FFFDF8;
+    font-weight:600;
+    position:relative;
+  }
+  .minical-actions{ margin-top:22px; display:flex; flex-direction:column; gap:10px; align-items:center; }
+  .minical-actions .calendar-actions{ margin-top:0; }
+  .rsvp-anchor-btn{
+    display:inline-block;
+    padding:12px 30px; border-radius:30px;
+    background:var(--gold); color:#FFFDF8; text-decoration:none;
+    font-family:'Montserrat',sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    box-shadow:0 6px 16px rgba(180,144,63,.3);
+  }
+  .rsvp-anchor-btn:hover{ background:var(--gold-deep); }
+
   /* DETALLES */
   #details{ background:var(--paper); }
   .cards{
@@ -251,6 +346,39 @@
     font-size:1.4rem; margin:0 0 10px; color:var(--ink);
   }
   .card p{ margin:3px 0; font-size:.98rem; color:var(--ink-soft); }
+
+  .map-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:22px;
+    padding:12px 24px;
+    border-radius:30px;
+    background:var(--gold);
+    color:#FFFDF8;
+    font-family:'Montserrat',sans-serif;
+    font-size:.8rem; letter-spacing:.05em;
+    text-decoration:none;
+    box-shadow:0 6px 16px rgba(180,144,63,.3);
+  }
+  .map-btn:hover{ background:var(--gold-deep); }
+
+  /* CÓDIGO DE VESTIMENTA */
+  #dresscode{ background:var(--paper); }
+  .dc-figures{
+    display:flex; justify-content:center; align-items:flex-end;
+    gap:clamp(30px,10vw,70px);
+    margin:30px 0 8px;
+  }
+  .dc-figure{ display:flex; flex-direction:column; align-items:center; }
+  .dc-figure svg{ width:clamp(58px,16vw,84px); height:auto; }
+  .dc-figure span{
+    font-family:'Montserrat',sans-serif;
+    font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
+    color:var(--ink-soft); margin-top:12px;
+  }
+  .dc-photo{
+    max-width:220px; margin:28px auto 6px;
+  }
+  .dc-photo img{ width:100%; height:auto; display:block; }
 
   /* CRONOGRAMA */
   #schedule{ background:var(--pearl); }
@@ -396,7 +524,13 @@
       <div class="envelope-frame" id="envelope" role="button" tabindex="0" aria-label="Abrir invitación">
         <div class="envelope-inner">
           <div class="env-body"></div>
-          <div class="seal">R&amp;N</div>
+          <div class="env-frame"></div>
+          <div class="env-corner tl"></div>
+          <div class="env-corner tr"></div>
+          <div class="env-corner bl"></div>
+          <div class="env-corner br"></div>
+          <div class="env-glow"></div>
+          <div class="seal"><img src="sello-rn.png" alt="R & N"></div>
           <div class="env-flap"></div>
         </div>
       </div>
@@ -409,7 +543,7 @@
 
     <section id="hero">
       <div class="container">
-        <div class="hero-pre">Con el corazón lleno de alegría</div>
+        <div class="hero-pre">"Sin embargo, Dios lo hizo todo hermoso para el momento apropiado"<br>— Eclesiastés 3:11</div>
         <h1 class="hero-names">Romario <span class="hero-amp">&amp;</span><br>Nicole</h1>
         <div class="hero-date">21 · Noviembre · 2026</div>
         <p class="hero-verse">Nos gustaría que nos acompañes en el día en que unimos nuestras vidas para siempre.</p>
@@ -425,11 +559,16 @@
       <div class="container">
         <div class="eyebrow">Nuestra historia</div>
         <div class="divider"></div>
-        <div class="gallery-grid">
-          <div class="frame"><img src="foto-1.jpg" alt="Romario y Nicole"></div>
-          <div class="frame"><img src="foto-2.jpg" alt="Romario y Nicole"></div>
+        <p class="note" style="margin-bottom:40px;">Muy pronto compartiremos cómo empezó todo...</p>
+
+        <h2 class="preboda-title" style="font-family:'Mrs Saint Delafield', cursive; font-size:clamp(2.4rem,7vw,3.2rem); font-weight:400;">¡Encontré al amor de mi vida!</h2>
+        <div class="preboda-cite">Cantares 3:4</div>
+        <div class="preboda-grid">
+          <div class="pb-frame"><img src="foto-1.jpg" alt="Romario y Nicole"></div>
+          <div class="pb-frame"><img src="foto-2.jpg" alt="Romario y Nicole"></div>
+          <div class="pb-frame"><img src="hero.jpg" alt="Romario y Nicole"></div>
+          <div class="pb-frame"><img src="foto-3.jpg" alt="El anillo"></div>
         </div>
-        <p class="note" style="margin-top:20px;">Muy pronto compartiremos cómo empezó todo...</p>
       </div>
     </section>
 
@@ -446,6 +585,22 @@
       </div>
     </section>
 
+    <section id="minical">
+      <div class="container">
+        <div class="minical-card">
+          <div class="minical-month" id="minicalMonth">Noviembre 2026</div>
+          <div class="minical-grid" id="minicalGrid"></div>
+          <div class="minical-actions">
+            <div class="calendar-actions">
+              <a href="#" class="cal-btn" id="googleCalBtn2">+ Google Calendar</a>
+              <a href="#" class="cal-btn" id="icsBtn2">+ Apple / Outlook</a>
+            </div>
+            <a href="#rsvp" class="rsvp-anchor-btn">Confirmar asistencia</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section id="details">
       <div class="container">
         <div class="eyebrow">Detalles del gran día</div>
@@ -453,21 +608,35 @@
         <div class="cards">
           <div class="card">
             <div class="eyebrow">Ceremonia</div>
-            <h3>4:00 PM</h3>
-            <p>Hotel Intercontinental Managua</p>
-            <p style="font-size:.82rem; opacity:.75;">(lugar por confirmar)</p>
+            <h3>4:30 PM</h3>
+            <p>Hotel Contempo</p>
           </div>
           <div class="card">
             <div class="eyebrow">Recepción</div>
             <h3>A continuación</h3>
-            <p>Hotel Intercontinental Managua</p>
-            <p style="font-size:.82rem; opacity:.75;">(lugar por confirmar)</p>
+            <p>Hotel Contempo</p>
           </div>
         </div>
+        <a href="https://www.google.com/maps/place/hotel+contempo/data=!4m2!3m1!1s0x8f73ffa35eb0681b:0x2515f97172776223?sa=X&ved=1t:242&ictx=111" target="_blank" rel="noopener" class="map-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Ver ubicación en Google Maps
+        </a>
         <div class="calendar-actions">
           <a href="#" class="cal-btn" id="googleCalBtn">+ Google Calendar</a>
           <a href="#" class="cal-btn" id="icsBtn">+ Apple / Outlook</a>
         </div>
+      </div>
+    </section>
+
+    <section id="dresscode">
+      <div class="container">
+        <div class="eyebrow">Código de vestimenta</div>
+        <div class="divider"></div>
+        <h2 style="font-family:'Forum',serif; font-weight:400; font-size:clamp(1.4rem,4.5vw,1.9rem); margin:0;">Formal</h2>
+        <div class="dc-photo">
+          <img src="siluetas.png" alt="Código de vestimenta formal">
+        </div>
+        <p class="note" style="margin-top:10px;">Reservamos el azul para el novio y el blanco para la novia</p>
       </div>
     </section>
 
@@ -476,12 +645,12 @@
         <div class="eyebrow">Cronograma del día</div>
         <div class="divider"></div>
         <div class="timeline">
-          <div class="tl-item"><div class="tl-time">4:00 PM</div><div class="tl-dot"></div><div class="tl-label">Ceremonia</div></div>
-          <div class="tl-item"><div class="tl-time">5:00 PM</div><div class="tl-dot"></div><div class="tl-label">Cóctail de bienvenida</div></div>
-          <div class="tl-item"><div class="tl-time">6:00 PM</div><div class="tl-dot"></div><div class="tl-label">Recepción</div></div>
-          <div class="tl-item"><div class="tl-time">7:00 PM</div><div class="tl-dot"></div><div class="tl-label">Cena</div></div>
-          <div class="tl-item"><div class="tl-time">8:00 PM</div><div class="tl-dot"></div><div class="tl-label">Primer baile</div></div>
-          <div class="tl-item"><div class="tl-time">9:00 PM</div><div class="tl-dot"></div><div class="tl-label">Fiesta y baile</div></div>
+          <div class="tl-item"><div class="tl-time">4:30 PM</div><div class="tl-dot"></div><div class="tl-label">Ceremonia</div></div>
+          <div class="tl-item"><div class="tl-time">5:30 PM</div><div class="tl-dot"></div><div class="tl-label">Cóctail de bienvenida</div></div>
+          <div class="tl-item"><div class="tl-time">6:30 PM</div><div class="tl-dot"></div><div class="tl-label">Recepción</div></div>
+          <div class="tl-item"><div class="tl-time">7:30 PM</div><div class="tl-dot"></div><div class="tl-label">Cena</div></div>
+          <div class="tl-item"><div class="tl-time">8:30 PM</div><div class="tl-dot"></div><div class="tl-label">Primer baile</div></div>
+          <div class="tl-item"><div class="tl-time">9:30 PM</div><div class="tl-dot"></div><div class="tl-label">Fiesta y baile</div></div>
         </div>
         <p class="note">Horario referencial, sujeto a cambios</p>
       </div>
@@ -587,19 +756,17 @@
   });
 
   // ---------- Agregar al calendario ----------
-  // Hora y lugar preliminares — actualiza aquí cuando estén confirmados
-  const WEDDING_LOCATION = 'Hotel Intercontinental Managua';
-  const WEDDING_START_LOCAL = '20261121T160000'; // 4:00 PM
-  const WEDDING_END_LOCAL = '20261121T230000';   // 11:00 PM aprox.
+  // Hora y lugar — actualiza aquí si cambian
+  const WEDDING_LOCATION = 'Hotel Contempo';
+  const WEDDING_START_LOCAL = '20261121T163000'; // 4:30 PM
+  const WEDDING_END_LOCAL = '20261121T233000';   // 11:30 PM aprox.
 
-  document.getElementById('googleCalBtn').addEventListener('click', (e) => {
-    e.preventDefault();
-    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Boda de Romario & Nicole')}&dates=${WEDDING_START_LOCAL}/${WEDDING_END_LOCAL}&ctz=America/Managua&details=${encodeURIComponent('¡Nos casamos! Hora y lugar por confirmar antes de la fecha.')}&location=${encodeURIComponent(WEDDING_LOCATION + ' (por confirmar)')}`;
+  function addToGoogleCalendar(){
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Boda de Romario & Nicole')}&dates=${WEDDING_START_LOCAL}/${WEDDING_END_LOCAL}&ctz=America/Managua&details=${encodeURIComponent('¡Nos casamos! Ceremonia y recepción en Hotel Contempo.')}&location=${encodeURIComponent(WEDDING_LOCATION)}`;
     window.open(url, '_blank');
-  });
+  }
 
-  document.getElementById('icsBtn').addEventListener('click', (e) => {
-    e.preventDefault();
+  function downloadICS(){
     const dtStamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
     const ics = [
       'BEGIN:VCALENDAR',
@@ -610,8 +777,8 @@
       `DTSTART;TZID=America/Managua:${WEDDING_START_LOCAL}`,
       `DTEND;TZID=America/Managua:${WEDDING_END_LOCAL}`,
       'SUMMARY:Boda de Romario & Nicole',
-      'DESCRIPTION:¡Nos casamos! Hora y lugar por confirmar antes de la fecha.',
-      `LOCATION:${WEDDING_LOCATION} (por confirmar)`,
+      'DESCRIPTION:¡Nos casamos! Ceremonia y recepción en Hotel Contempo.',
+      `LOCATION:${WEDDING_LOCATION}`,
       'END:VEVENT',
       'END:VCALENDAR'
     ].join('\r\n');
@@ -620,11 +787,46 @@
     link.href = URL.createObjectURL(blob);
     link.download = 'boda-romario-nicole.ics';
     link.click();
+  }
+
+  ['googleCalBtn','googleCalBtn2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => { e.preventDefault(); addToGoogleCalendar(); });
+  });
+  ['icsBtn','icsBtn2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => { e.preventDefault(); downloadICS(); });
   });
 
+  // ---------- Mini calendario (noviembre 2026) ----------
+  function buildMiniCalendar(){
+    const year = 2026, month = 10, highlightDay = 21; // month 0-indexed: 10 = noviembre
+    const dowNames = ['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
+    const grid = document.getElementById('minicalGrid');
+    dowNames.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'dow';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+    const firstDay = new Date(year, month, 1);
+    const startOffset = (firstDay.getDay() + 6) % 7; // lunes=0
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < startOffset; i++) {
+      const empty = document.createElement('div');
+      grid.appendChild(empty);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      el.className = 'day' + (d === highlightDay ? ' highlight' : '');
+      el.textContent = d;
+      grid.appendChild(el);
+    }
+  }
+  buildMiniCalendar();
 
   // ---------- Cuenta regresiva ----------
-  const WEDDING_DATE = new Date('2026-11-21T00:00:00');
+  const WEDDING_DATE = new Date('2026-11-21T16:30:00');
   function tickCountdown(){
     const now = new Date();
     let diff = WEDDING_DATE - now;
