@@ -1,0 +1,1330 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<title>Romario &amp; Nicole · 21 de Enero 2027</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500;1,600&family=Imperial+Script&family=Rouge+Script&family=Montserrat:wght@400;500;600&family=Forum&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --pearl: #FFFDF8;
+    --paper: #FBF3E1;
+    --champagne: #F2E2C0;
+    --champagne-deep: #E4C793;
+    --gold: #B4903F;
+    --gold-light: #E3C88C;
+    --gold-deep: #8C6B2E;
+    --ink: #4A4335;
+    --ink-soft: #9C8F73;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; padding:0;
+    background:var(--paper);
+    font-family:'Cormorant Garamond', serif;
+    color:var(--ink);
+    overflow-x:hidden;
+  }
+  img{ max-width:100%; display:block; }
+  ::selection{ background:var(--champagne-deep); color:var(--ink); }
+
+  .eyebrow{
+    font-family:'Montserrat',sans-serif;
+    font-size:.68rem;
+    letter-spacing:.32em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin:0 0 16px;
+  }
+  .divider{
+    width:54px; height:1px;
+    background:linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin:24px auto;
+  }
+
+  /* ===================== PANTALLA DEL SOBRE ===================== */
+  #envelope-screen{
+    position:fixed; inset:0;
+    min-height:100vh; min-height:100dvh;
+    display:flex; align-items:center; justify-content:center;
+    background: radial-gradient(ellipse at 50% 25%, var(--pearl) 0%, var(--champagne) 100%);
+    z-index:50;
+    transition:opacity .9s ease, visibility .9s ease;
+    padding:24px;
+  }
+  #envelope-screen.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+
+  .env-label{
+    font-family:'Imperial Script', cursive;
+    font-size:2.9rem;
+    letter-spacing:.02em;
+    color:var(--gold-deep);
+    opacity:.9;
+    text-align:center;
+    margin-bottom:22px;
+  }
+
+  /* Truco de aspect-ratio robusto (funciona en todos los navegadores móviles) */
+  .envelope-frame{
+    position:relative;
+    width:min(78vw, 300px);
+    margin:0 auto;
+    cursor:pointer;
+  }
+  .envelope-frame::before{
+    content:'';
+    display:block;
+    padding-top:66%;
+  }
+  .envelope-inner{
+    position:absolute; inset:0;
+    filter:drop-shadow(0 14px 26px rgba(180,144,63,.35));
+  }
+  .env-body{
+    position:absolute; inset:0;
+    background:linear-gradient(160deg, var(--champagne) 0%, var(--champagne-deep) 100%);
+    border-radius:5px;
+  }
+  .env-flap{
+    position:absolute; top:0; left:0; right:0; height:100%;
+    background:linear-gradient(160deg, #f1e2bf, var(--champagne-deep));
+    clip-path:polygon(0 0, 50% 56%, 100% 0);
+    transform-origin:top center;
+    transition:transform 1.05s cubic-bezier(.6,.08,.22,1);
+    border-radius:5px 5px 0 0;
+    z-index:2;
+  }
+  .envelope-frame.open .env-flap{ transform:rotateX(178deg); }
+  .seal{
+    position:absolute; top:50%; left:50%;
+    width:26%;
+    transform:translate(-50%,-50%);
+    z-index:3;
+    transition:opacity .4s ease, transform .5s ease;
+  }
+  .seal img{
+    width:100%; height:auto; display:block;
+  }
+  .envelope-frame.open .seal{ opacity:0; transform:translate(-50%,-50%) scale(.4); }
+
+  .env-cta{
+    margin-top:26px;
+    font-family:'Imperial Script', cursive;
+    font-size:2.7rem;
+    letter-spacing:.02em;
+    color:var(--gold-deep);
+    opacity:.9;
+    text-align:center;
+    animation:pulse 2.6s ease-in-out infinite;
+  }
+  @keyframes pulse{ 0%,100%{opacity:.45;} 50%{opacity:1;} }
+
+  /* ===================== INVITACIÓN ===================== */
+  #invitation{
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .9s ease .25s, transform .9s ease .25s;
+  }
+  #invitation.show{ opacity:1; transform:translateY(0); }
+
+  section{ padding:76px 22px; position:relative; }
+  .container{ max-width:640px; margin:0 auto; text-align:center; }
+
+  /* HERO */
+  #hero{ padding-top:88px; padding-bottom:20px; background:var(--pearl); }
+  .hero-pre{
+    font-style:italic;
+    font-size:1.02rem;
+    line-height:1.6;
+    color:var(--ink-soft);
+    margin-bottom:8px;
+  }
+  .hero-families{
+    font-family:'Montserrat',sans-serif;
+    font-size:.72rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--gold-deep);
+    margin:26px 0 10px;
+  }
+  .hero-names{
+    font-family:'Imperial Script', cursive;
+    font-weight:400;
+    font-size:clamp(4.6rem, 20vw, 8rem);
+    line-height:1.25;
+    color:var(--ink);
+    margin:0;
+    letter-spacing:.01em;
+  }
+  .hero-amp{ font-family:'Rouge Script', cursive; color:var(--gold); display:inline-block; padding:0 .12em; }
+  .hero-date{
+    font-family:'Montserrat',sans-serif;
+    font-size:.85rem;
+    letter-spacing:.2em;
+    text-transform:uppercase;
+    color:var(--gold);
+    margin-top:18px;
+  }
+  .hero-verse{
+    max-width:420px; margin:26px auto 0;
+    font-size:1.08rem; line-height:1.75;
+    color:var(--ink-soft);
+  }
+  .guest-line{
+    margin-top:18px;
+    font-size:.95rem;
+    font-style:italic;
+    color:var(--ink);
+  }
+
+  /* FOTO PRINCIPAL */
+  .photo-wide{
+    width:100%;
+    aspect-ratio:3/2;
+    overflow:hidden;
+  }
+  .photo-wide img{ width:100%; height:100%; object-fit:cover; }
+  section.photo-section{ padding:0; }
+
+  /* GALERÍA */
+  #gallery{ background:var(--pearl); padding-top:36px; }
+  .story-text{
+    max-width:460px;
+    margin:0 auto 56px;
+    text-align:center;
+  }
+  .story-text p{
+    font-size:1.12rem;
+    line-height:1.85;
+    color:var(--ink);
+    margin:0 0 20px;
+  }
+  .story-text p:last-child{ margin-bottom:0; }
+  .story-text em{
+    font-style:italic;
+    color:var(--gold-deep);
+    font-weight:500;
+  }
+
+  /* GALERÍA PRE-BODA */
+  .preboda-title{
+    font-family:'Forum', serif;
+    font-weight:400;
+    font-size:clamp(1.5rem,5vw,2rem);
+    color:var(--ink);
+    margin:0;
+  }
+  .preboda-cite{
+    font-family:'Imperial Script', cursive;
+    font-size:2.1rem;
+    color:var(--gold-deep);
+    margin-top:2px;
+  }
+  .preboda-grid{
+    display:grid; grid-template-columns:1fr 1fr; gap:12px;
+    margin-top:30px;
+  }
+  .pb-frame{
+    aspect-ratio:1/1;
+    border-radius:8px;
+    overflow:hidden;
+    background:var(--pearl);
+    box-shadow:0 0 0 1px var(--champagne-deep);
+  }
+  .pb-frame img{ width:100%; height:100%; object-fit:cover; object-position:50% 60%; display:block; transition:transform .4s ease; }
+  button.pb-frame{
+    position:relative; display:block; width:100%;
+    padding:0; border:0; cursor:pointer; font:inherit;
+    -webkit-appearance:none; appearance:none;
+  }
+  button.pb-frame:hover img{ transform:scale(1.04); }
+  button.pb-frame:focus-visible{ outline:2px solid var(--gold); outline-offset:2px; }
+  .pb-more{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(25,25,25,.5);
+    color:#FFFDF8;
+    font-family:'Forum', serif; font-size:2.1rem; letter-spacing:.02em;
+  }
+
+  /* CARRUSEL DE FOTOS */
+  .carousel{
+    --sw:min(66vw, 300px);
+    position:relative;
+    width:100vw;
+    margin:30px 0 0 calc(50% - 50vw);
+  }
+  .car-viewport{
+    position:relative;
+    height:calc(var(--sw) * 1.5 + 64px);
+    overflow:hidden;
+    touch-action:pan-y;
+    user-select:none; -webkit-user-select:none;
+    cursor:grab;
+  }
+  .car-viewport.dragging{ cursor:grabbing; }
+  .car-slide{
+    position:absolute; top:16px; left:50%;
+    width:var(--sw); height:calc(var(--sw) * 1.5);
+    margin-left:calc(var(--sw) / -2);
+    padding:0; border:0; border-radius:10px; overflow:hidden;
+    background:var(--champagne);
+    box-shadow:0 12px 26px rgba(74,67,53,.2), 0 0 0 1px var(--champagne-deep);
+    cursor:pointer;
+    transition:transform .75s cubic-bezier(.4,0,.2,1), opacity .75s ease;
+    will-change:transform, opacity;
+    -webkit-appearance:none; appearance:none;
+  }
+  .car-viewport.dragging .car-slide{ transition:none; }
+  .car-slide img{
+    width:100%; height:100%; object-fit:cover; display:block;
+    pointer-events:none; -webkit-user-drag:none;
+  }
+  .car-slide:focus-visible{ outline:2px solid var(--gold); outline-offset:3px; }
+  .car-dots{ display:flex; justify-content:center; flex-wrap:wrap; margin-top:4px; padding:0 22px; }
+  .car-dot{
+    width:14px; height:22px; padding:0; border:0; background:none; cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .car-dot::before{
+    content:''; width:6px; height:6px; border-radius:50%;
+    background:var(--champagne-deep);
+    transition:width .3s ease, background .3s ease;
+  }
+  .car-dot.on::before{ width:16px; border-radius:3px; background:var(--gold); }
+  .car-arrow{
+    display:none; position:absolute; top:calc(16px + var(--sw) * .75 - 22px);
+    width:44px; height:44px; padding:0; border-radius:50%;
+    border:1px solid var(--gold); background:rgba(255,253,248,.92); color:var(--gold-deep);
+    cursor:pointer; z-index:20; align-items:center; justify-content:center;
+  }
+  .car-prev{ left:16px; }
+  .car-next{ right:16px; }
+  @media (hover:hover) and (pointer:fine){ .car-arrow{ display:flex; } }
+
+  /* VISOR DE FOTOS */
+  #lightbox{
+    position:fixed; inset:0; z-index:100;
+    display:none; align-items:center; justify-content:center;
+    background:#121212;
+  }
+  #lightbox.open{ display:flex; }
+  .lb-stage{
+    width:100%; height:100%;
+    display:flex; align-items:center; justify-content:center;
+    padding:64px 12px 70px;
+    touch-action:pan-y pinch-zoom;
+  }
+  .lb-img{
+    max-width:100%; max-height:100%; object-fit:contain;
+    border-radius:4px;
+    opacity:0; transition:opacity .25s ease;
+    user-select:none; -webkit-user-drag:none;
+  }
+  .lb-img.loaded{ opacity:1; }
+  .lb-btn{
+    position:absolute;
+    width:44px; height:44px; border-radius:50%;
+    border:1px solid rgba(227,200,140,.6);
+    background:rgba(20,20,20,.4);
+    color:var(--gold-light);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer; padding:0;
+  }
+  .lb-btn svg{ width:20px; height:20px; display:block; }
+  .lb-close{ top:max(12px, env(safe-area-inset-top)); right:12px; }
+  .lb-prev{ left:10px; top:50%; transform:translateY(-50%); }
+  .lb-next{ right:10px; top:50%; transform:translateY(-50%); }
+  .lb-count{
+    position:absolute; left:0; right:0;
+    bottom:max(20px, env(safe-area-inset-bottom));
+    text-align:center;
+    font-family:'Montserrat',sans-serif; font-size:.75rem; letter-spacing:.2em;
+    color:var(--gold-light);
+  }
+  body.lb-lock{ overflow:hidden; }
+
+  /* BENDICIÓN + FECHA */
+  #blessing{ background:var(--paper); }
+  #blessing p{
+    max-width:440px; margin:0 auto; font-size:1.1rem; line-height:1.75; color:var(--ink-soft);
+  }
+  #blessing .blessing-date{
+    margin-top:28px;
+    font-family:'Forum', serif;
+    font-size:clamp(1.3rem,4.5vw,1.7rem);
+    color:var(--ink);
+  }
+
+  /* COUNTDOWN */
+  #countdown{ background:linear-gradient(160deg, var(--champagne) 0%, var(--champagne-deep) 100%); color:var(--ink); }
+  #countdown .eyebrow{ color:var(--gold-deep); }
+  #countdown h2{
+    font-family:'Forum', serif;
+    font-weight:400;
+    font-size:clamp(1.5rem,5.5vw,2.1rem);
+    margin:0 0 34px;
+    color:var(--ink);
+  }
+  .count-grid{
+    display:flex; justify-content:center; gap:clamp(10px,4vw,28px);
+    flex-wrap:wrap;
+  }
+  .count-unit{ min-width:58px; }
+  .count-num{
+    font-size:clamp(1.9rem,7vw,2.8rem);
+    color:var(--gold-deep);
+    line-height:1;
+    font-variant-numeric:tabular-nums;
+  }
+  .count-label{
+    font-family:'Montserrat',sans-serif;
+    font-size:.58rem; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--ink); opacity:.6; margin-top:8px;
+  }
+
+  /* MINI CALENDARIO */
+  #minical{ background:var(--pearl); }
+  .minical-card{
+    max-width:340px; margin:34px auto 0;
+    background:var(--paper);
+    border:1px solid var(--champagne-deep);
+    border-radius:12px;
+    padding:26px 22px 30px;
+    box-shadow:0 10px 26px rgba(180,144,63,.14);
+  }
+  .minical-month{
+    font-family:'Imperial Script', cursive;
+    font-size:3.1rem;
+    color:var(--gold-deep);
+    margin-bottom:14px;
+  }
+  .minical-grid{
+    display:grid; grid-template-columns:repeat(7,1fr);
+    gap:6px 2px;
+  }
+  .minical-grid .dow{
+    font-family:'Montserrat',sans-serif;
+    font-size:.6rem; letter-spacing:.05em; text-transform:uppercase;
+    color:var(--ink-soft); padding-bottom:4px;
+  }
+  .minical-grid .day{
+    font-size:.92rem; color:var(--ink);
+    padding:5px 0; border-radius:50%;
+    position:relative;
+  }
+  .minical-grid a{
+    color:inherit !important;
+    text-decoration:none !important;
+    font-weight:inherit !important;
+  }
+  .minical-grid .day.highlight{
+    position:relative;
+    display:flex; align-items:center; justify-content:center;
+    padding:0;
+  }
+  .heart-icon{
+    position:absolute; inset:0;
+    display:flex; align-items:center; justify-content:center;
+    pointer-events:none;
+  }
+  .heart-icon svg{ width:26px; height:26px; display:block; }
+  .heart-num{
+    position:relative; z-index:1;
+    color:#FFFDF8;
+    font-family:'Montserrat',sans-serif;
+    font-weight:700;
+    font-size:.7rem;
+    line-height:1;
+    margin-top:-2px;
+  }
+  .minical-actions{ margin-top:22px; display:flex; flex-direction:column; gap:10px; align-items:center; }
+  .minical-actions .calendar-actions{ margin-top:0; }
+  .rsvp-anchor-btn{
+    display:inline-block;
+    padding:12px 30px; border-radius:30px;
+    background:var(--gold); color:#FFFDF8; text-decoration:none;
+    font-family:'Montserrat',sans-serif; font-size:.78rem; letter-spacing:.08em; text-transform:uppercase;
+    box-shadow:0 6px 16px rgba(180,144,63,.3);
+  }
+  .rsvp-anchor-btn:hover{ background:var(--gold-deep); }
+
+  /* DETALLES */
+  #details{ background:var(--paper); }
+  .cards{
+    display:grid; grid-template-columns:1fr; gap:16px; margin-top:36px;
+    text-align:left;
+  }
+  @media(min-width:560px){ .cards{ grid-template-columns:1fr 1fr; } }
+  .card{
+    background:var(--pearl);
+    border:1px solid var(--champagne-deep);
+    border-radius:6px;
+    padding:28px 24px;
+  }
+  .card .eyebrow{ text-align:left; margin-bottom:10px; }
+  .card h3{
+    font-family:'Forum', serif;
+    font-weight:400;
+    font-size:1.4rem; margin:0 0 10px; color:var(--ink);
+  }
+  .card p{ margin:3px 0; font-size:.98rem; color:var(--ink-soft); }
+
+  .map-btn{
+    display:inline-flex; align-items:center; gap:8px;
+    margin-top:22px;
+    padding:12px 24px;
+    border-radius:30px;
+    background:var(--gold);
+    color:#FFFDF8;
+    font-family:'Montserrat',sans-serif;
+    font-size:.8rem; letter-spacing:.05em;
+    text-decoration:none;
+    box-shadow:0 6px 16px rgba(180,144,63,.3);
+  }
+  .map-btn:hover{ background:var(--gold-deep); }
+
+  /* CRONOGRAMA */
+  #schedule{ background:var(--pearl); }
+  .timeline{
+    max-width:420px; margin:36px auto 0; text-align:left;
+  }
+  .tl-item{
+    display:flex; gap:18px; padding-bottom:26px; position:relative;
+  }
+  .tl-item::before{
+    content:''; position:absolute; left:54px; top:22px; bottom:-4px;
+    width:1px; background:var(--champagne-deep);
+  }
+  .tl-item:last-child::before{ display:none; }
+  .tl-time{
+    font-family:'Montserrat',sans-serif;
+    font-size:.72rem; letter-spacing:.05em; color:var(--gold-deep);
+    width:54px; flex-shrink:0; padding-top:3px;
+  }
+  .tl-dot{
+    width:9px; height:9px; border-radius:50%; background:var(--gold);
+    margin-top:6px; flex-shrink:0;
+  }
+  .tl-label{ font-size:1.05rem; color:var(--ink); padding-top:0; }
+  .note{
+    text-align:center; font-size:.8rem; color:var(--ink-soft);
+    font-style:italic; margin-top:8px;
+  }
+
+  /* CÓDIGO DE VESTIMENTA */
+  #dresscode{ background:var(--paper); }
+  .dc-photo{
+    max-width:220px; margin:28px auto 6px;
+  }
+  .dc-photo img{ width:100%; height:auto; display:block; }
+
+  /* REGALO */
+  #gift{ background:var(--pearl); }
+  #gift p{ max-width:440px; margin:0 auto; font-size:1.03rem; line-height:1.7; color:var(--ink-soft); }
+  .gift-actions{
+    display:flex; flex-wrap:wrap; gap:14px; justify-content:center; margin-top:30px;
+  }
+  .gift-card{
+    width:220px; padding:20px 18px;
+    border:1px solid var(--champagne-deep); border-radius:10px;
+    background:var(--paper);
+    text-align:left;
+  }
+  .gift-card .gift-icon{ font-size:1.4rem; margin-bottom:8px; }
+  .gift-card .gc-bank{
+    font-family:'Forum', serif; font-size:1.1rem; color:var(--ink); margin-bottom:2px;
+  }
+  .gift-card .gc-type{
+    font-family:'Montserrat',sans-serif; font-size:.66rem; letter-spacing:.08em; text-transform:uppercase;
+    color:var(--gold-deep); margin-bottom:10px;
+  }
+  .gift-card .gc-number{
+    font-family:'Cormorant Garamond',serif; font-size:1.15rem; letter-spacing:.03em;
+    color:var(--ink); margin-bottom:12px;
+  }
+  .gc-copy{
+    display:inline-flex; align-items:center; gap:6px;
+    font-family:'Montserrat',sans-serif; font-size:.68rem; letter-spacing:.05em;
+    padding:8px 14px; border-radius:20px;
+    border:1px solid var(--gold); color:var(--gold); background:transparent;
+    cursor:pointer;
+  }
+  .gc-copy:hover{ background:var(--gold); color:#FFFDF8; }
+  .gift-card-pending{
+    border-style:dashed;
+    text-align:center;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    opacity:.8;
+  }
+  .gift-card-pending .gc-type{ margin-bottom:0; }
+
+  /* RSVP */
+  #rsvp{ background:var(--pearl); color:var(--ink); border-top:1px solid var(--champagne-deep); border-bottom:1px solid var(--champagne-deep); }
+  #rsvp .eyebrow{ color:var(--gold-deep); }
+  #rsvp h2{
+    font-family:'Forum', serif;
+    font-weight:400;
+    font-size:clamp(1.5rem,5.5vw,2.1rem);
+    margin:0 0 12px; color:var(--ink);
+  }
+  #rsvp .rsvp-sub{ color:var(--ink-soft); font-size:.95rem; margin-bottom:34px; }
+  #rsvp .rsvp-lead{
+    font-style:italic; font-size:1.15rem; line-height:1.6;
+    color:var(--ink-soft); margin:0 0 18px;
+  }
+  #rsvp .rsvp-deadline{
+    font-family:'Forum', serif; font-size:1.15rem;
+    color:var(--ink); margin:0 0 16px;
+  }
+  #rsvp .rsvp-contact{
+    font-family:'Forum', serif; font-size:1.2rem;
+    color:var(--ink); margin:0;
+  }
+  #rsvp .rsvp-contact a{
+    color:var(--gold-deep); text-decoration:none;
+    border-bottom:1px solid var(--champagne-deep);
+    padding-bottom:1px;
+  }
+  .rsvp-form{ max-width:400px; margin:36px auto 0; text-align:left; }
+  .rsvp-field{ margin-bottom:18px; }
+  .rsvp-field label{
+    display:block; font-family:'Montserrat',sans-serif; font-size:.62rem;
+    letter-spacing:.12em; text-transform:uppercase; color:var(--gold-deep);
+    opacity:.9; margin-bottom:7px;
+  }
+  .rsvp-field input, .rsvp-field select, .rsvp-field textarea{
+    width:100%; padding:11px 13px; border-radius:6px;
+    border:1px solid var(--champagne-deep);
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Cormorant Garamond',serif; font-size:1.05rem;
+  }
+  .rsvp-field select option{ color:var(--ink); }
+  .rsvp-field textarea{ resize:vertical; min-height:70px; }
+  .rsvp-submit{
+    width:100%; padding:14px; border:none; border-radius:6px;
+    background:var(--gold); color:#FFFDF8; cursor:pointer;
+    font-family:'Montserrat',sans-serif; font-size:.85rem; letter-spacing:.1em;
+    text-transform:uppercase; margin-top:6px;
+  }
+  .rsvp-submit:hover{ background:var(--gold-deep); }
+
+  /* CALENDARIO */
+  .calendar-actions{
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:center; margin-top:30px;
+  }
+  .cal-btn{
+    font-family:'Montserrat',sans-serif; font-size:.78rem; letter-spacing:.05em;
+    padding:11px 20px; border-radius:30px; cursor:pointer; text-decoration:none;
+    border:1px solid var(--gold); color:var(--gold); background:transparent;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+
+  /* CIERRE */
+  #closing{ background:var(--pearl); padding-bottom:110px; }
+  #closing .flourish{ font-size:1.3rem; color:var(--gold); margin-bottom:16px; }
+  #closing .signature{
+    font-family:'Imperial Script', cursive;
+    font-size:2.7rem; color:var(--gold-deep);
+  }
+  #closing .closing-sub{
+    margin-top:18px;
+    font-family:'Forum', serif;
+    font-size:1.1rem;
+    color:var(--ink);
+  }
+
+  /* MUSICA */
+  #music-toggle{
+    position:fixed; bottom:max(18px, env(safe-area-inset-bottom)); right:18px; z-index:40;
+    width:50px; height:50px; border-radius:50%;
+    background:var(--pearl); color:var(--gold-deep);
+    border:1px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    box-shadow:0 8px 18px rgba(180,144,63,.28);
+    opacity:0; transform:translateY(10px);
+    transition:opacity .6s ease .6s, transform .6s ease .6s;
+  }
+  #music-toggle.show{ opacity:1; transform:translateY(0); }
+  #music-toggle .bars{ display:flex; align-items:flex-end; gap:2px; height:13px; }
+  #music-toggle .bars span{ width:3px; background:var(--gold-deep); border-radius:1px; animation:eq 1s ease-in-out infinite; }
+  #music-toggle .bars span:nth-child(1){ height:6px; animation-delay:0s; }
+  #music-toggle .bars span:nth-child(2){ height:13px; animation-delay:.2s; }
+  #music-toggle .bars span:nth-child(3){ height:9px; animation-delay:.4s; }
+  #music-toggle.paused .bars span{ animation-play-state:paused; height:4px; }
+  @keyframes eq{ 0%,100%{ transform:scaleY(.4);} 50%{ transform:scaleY(1);} }
+
+  @media(max-width:400px){
+    section{ padding:60px 18px; }
+    .envelope-frame{ width:min(82vw, 260px); }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- ========== PANTALLA DEL SOBRE ========== -->
+  <div id="envelope-screen">
+    <div>
+      <div class="env-label">Guarda la fecha</div>
+      <div class="envelope-frame" id="envelope" role="button" tabindex="0" aria-label="Abrir invitación">
+        <div class="envelope-inner">
+          <div class="env-body"></div>
+          <div class="seal"><img src="sello-rn.png" alt="R & N"></div>
+          <div class="env-flap"></div>
+        </div>
+      </div>
+      <div class="env-cta">Toca el sobre para abrir</div>
+    </div>
+  </div>
+
+  <!-- ========== INVITACIÓN ========== -->
+  <div id="invitation">
+
+    <section id="hero">
+      <div class="container">
+        <div class="hero-pre">"Sin embargo, Dios lo hizo todo hermoso para el momento apropiado"<br>Eclesiastés 3:11 (NTV)</div>
+        <div class="hero-families">Junto a nuestras familias,</div>
+        <h1 class="hero-names">Romario <span class="hero-amp">&amp;</span><br>Nicole</h1>
+        <p class="hero-verse">Con alegría y gratitud a Dios, queremos invitarte a celebrar con nosotros el día en que unimos nuestra vida en matrimonio.</p>
+        <p class="guest-line" id="guestLine">Con todo nuestro cariño para ti</p>
+      </div>
+    </section>
+
+    <section id="gallery">
+      <div class="container">
+        <div class="eyebrow">Nuestra historia</div>
+        <div class="divider"></div>
+        <div class="story-text">
+          <p>Nuestra historia comenzó mucho antes de que pudiéramos imaginarlo. Nos conocemos desde muy pequeños y durante nuestra adolescencia, nació una amistad que el tiempo transformaría en algo mucho más especial.</p>
+          <p>Dios tiene tiempos perfectos y sin darnos cuenta, Él fue preparando nuestros corazones y guiando nuestros caminos hasta encontrarnos en el momento correcto. Un 21 de octubre del 2023 comenzamos nuestro noviazgo y desde entonces, Su mano ha estado presente en cada paso, en cada risa y en cada sueño compartido.</p>
+          <p>Hoy, tres años después, llegamos al momento que tanto hemos soñado: dar el paso más especial de nuestras vidas y unirnos para siempre. Acompáñanos en el inicio de una nueva etapa de nuestra historia de amor, <em>una historia escrita por Dios.</em></p>
+        </div>
+
+        <h2 class="preboda-title">¡Encontré al amor de mi vida!</h2>
+        <div class="preboda-cite">Cantares 3:4</div>
+        <div class="carousel" id="carousel" role="region" aria-roledescription="carrusel" aria-label="Galería de fotos">
+          <div class="car-viewport" id="carViewport"></div>
+          <button class="car-arrow car-prev" id="carPrev" type="button" aria-label="Foto anterior">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+          </button>
+          <button class="car-arrow car-next" id="carNext" type="button" aria-label="Foto siguiente">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+          </button>
+          <div class="car-dots" id="carDots"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="blessing">
+      <div class="container">
+        <p>Será una bendición contar con tu presencia<br>para celebrar juntos este día que el Señor<br>ha diseñado para nosotros.</p>
+        <div class="blessing-date" style="font-family:'Imperial Script', cursive; font-size:2.6rem; color:var(--gold-deep);">Jueves 21 de Enero, 2027</div>
+      </div>
+    </section>
+
+    <section id="countdown">
+      <div class="container">
+        <div class="eyebrow">Falta muy poco</div>
+        <h2>Nos casamos en...</h2>
+        <div class="count-grid">
+          <div class="count-unit"><div class="count-num" id="cd-days">0</div><div class="count-label">Días</div></div>
+          <div class="count-unit"><div class="count-num" id="cd-hours">0</div><div class="count-label">Horas</div></div>
+          <div class="count-unit"><div class="count-num" id="cd-min">0</div><div class="count-label">Minutos</div></div>
+          <div class="count-unit"><div class="count-num" id="cd-sec">0</div><div class="count-label">Segundos</div></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="minical">
+      <div class="container">
+        <div class="eyebrow">El gran día</div>
+        <div class="minical-card">
+          <div class="minical-month" id="minicalMonth">Enero 2027</div>
+          <div class="minical-grid" id="minicalGrid"></div>
+          <div class="minical-actions">
+            <div class="calendar-actions">
+              <a href="#" class="cal-btn" id="googleCalBtn2">+ Google Calendar</a>
+              <a href="#" class="cal-btn" id="icsBtn2">+ Apple / Outlook</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="photo-section">
+      <div class="photo-wide"><img src="amplia-1.jpg" alt="Romario y Nicole" style="object-position:50% 80%"></div>
+    </section>
+
+    <section id="details">
+      <div class="container">
+        <div class="eyebrow">Detalles</div>
+        <div class="divider"></div>
+        <div class="cards">
+          <div class="card">
+            <div class="eyebrow">Ceremonia</div>
+            <h3>4:00 P.M.</h3>
+            <p>Hotel Contempo</p>
+          </div>
+          <div class="card">
+            <div class="eyebrow">Recepción</div>
+            <h3>A continuación</h3>
+            <p>Hotel Contempo</p>
+          </div>
+        </div>
+        <a href="https://www.google.com/maps/place/hotel+contempo/data=!4m2!3m1!1s0x8f73ffa35eb0681b:0x2515f97172776223?sa=X&ved=1t:242&ictx=111" target="_blank" rel="noopener" class="map-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-7.5 8-13a8 8 0 1 0-16 0c0 5.5 8 13 8 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+          Ver ubicación en Google Maps
+        </a>
+      </div>
+    </section>
+
+    <section class="photo-section">
+      <div class="photo-wide"><img src="amplia-2.jpg" alt="Romario y Nicole" style="object-position:50% 24%"></div>
+    </section>
+
+    <section id="dresscode">
+      <div class="container">
+        <div class="eyebrow">Código de vestimenta</div>
+        <div class="divider"></div>
+        <h2 style="font-family:'Forum',serif; font-weight:400; font-size:clamp(1.4rem,4.5vw,1.9rem); margin:0;">Formal</h2>
+        <div class="dc-photo">
+          <img src="siluetas.png" alt="Código de vestimenta formal">
+        </div>
+        <p class="note" style="margin-top:10px; font-size:.95rem;">Con cariño, evitar prendas en tonos azul navy, blanco, dorado, beige y similares — los reservamos para los novios.</p>
+      </div>
+    </section>
+
+    <section id="gift">
+      <div class="container">
+        <div class="eyebrow">Regalo</div>
+        <div class="divider"></div>
+        <p>Su presencia será nuestro regalo más valioso. Si deseas tener un detalle con nosotros, te dejamos esta opción para iniciar nuestro nuevo hogar.</p>
+        <div class="gift-actions">
+          <div class="gift-card">
+            <div class="gift-icon">🏦</div>
+            <div class="gc-bank">BAC</div>
+            <div class="gc-type">Cuenta en dólares</div>
+            <div class="gc-number" id="acct1">365139625</div>
+            <button class="gc-copy" onclick="copyAccount('acct1', this)">Copiar número</button>
+          </div>
+          <div class="gift-card">
+            <div class="gift-icon">🏦</div>
+            <div class="gc-bank">LAFISE</div>
+            <div class="gc-type">Cuenta en dólares</div>
+            <div class="gc-number" id="acct2">133273562</div>
+            <button class="gc-copy" onclick="copyAccount('acct2', this)">Copiar número</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="rsvp">
+      <div class="container">
+        <div class="eyebrow">Confirmar asistencia</div>
+        <div class="divider"></div>
+        <p class="rsvp-lead">Tu presencia es importante para nosotros,</p>
+        <p class="rsvp-deadline">Confirma antes del 02 enero, 2027</p>
+        <p class="rsvp-contact">A <a href="tel:+50586188572">8618-8572</a> o <a href="tel:+50583538223">8353-8223</a></p>
+
+        <div class="rsvp-form">
+          <div class="rsvp-field">
+            <label>Nombre completo</label>
+            <input type="text" id="rsvpName" placeholder="Tu nombre">
+          </div>
+          <div class="rsvp-field">
+            <label>¿Asistirás?</label>
+            <select id="rsvpAttending">
+              <option value="Sí, ahí estaré">Sí, ahí estaré</option>
+              <option value="No podré asistir">No podré asistir</option>
+            </select>
+          </div>
+          <div class="rsvp-field">
+            <label>Mensaje para los novios (opcional)</label>
+            <textarea id="rsvpMessage" placeholder="Escribe algo lindo..."></textarea>
+          </div>
+          <button class="rsvp-submit" id="rsvpSubmit">Enviar confirmación</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="closing">
+      <div class="container">
+        <div class="flourish">✦</div>
+        <div class="signature">Con todo nuestro cariño,<br>Romario <span style="font-family:'Rouge Script', cursive; margin-left:.1em;">&amp;</span> Nicole</div>
+        <div class="closing-sub">Esperamos contar con tu presencia.</div>
+      </div>
+    </section>
+
+  </div>
+
+  <div id="lightbox" role="dialog" aria-modal="true" aria-label="Galería de fotos" aria-hidden="true">
+    <button class="lb-btn lb-close" id="lbClose" type="button" aria-label="Cerrar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 5l14 14M19 5L5 19"/></svg>
+    </button>
+    <button class="lb-btn lb-prev" id="lbPrev" type="button" aria-label="Foto anterior">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="lb-stage" id="lbStage"><img class="lb-img" id="lbImg" alt=""></div>
+    <button class="lb-btn lb-next" id="lbNext" type="button" aria-label="Foto siguiente">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>
+    </button>
+    <div class="lb-count" id="lbCount"></div>
+  </div>
+
+  <div id="music-toggle" role="button" aria-label="Reproducir o pausar la melodía">
+    <div class="bars"><span></span><span></span><span></span></div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+<script>
+  // ---------- Nombre de invitado (solo vía URL, sin panel visible) ----------
+  // Para personalizar, comparte un link así: tu-sitio.com/?invitado=Familia+Perez
+  const params = new URLSearchParams(window.location.search);
+  const guest = params.get('invitado');
+  if (guest) {
+    const el = document.getElementById('guestLine');
+    el.textContent = 'Con todo nuestro cariño para ' + decodeURIComponent(guest.replace(/\+/g, ' '));
+  }
+
+  // ---------- Copiar número de cuenta ----------
+  function copyAccount(id, btn){
+    const text = document.getElementById(id).textContent.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const original = btn.textContent;
+      btn.textContent = '¡Copiado!';
+      setTimeout(() => { btn.textContent = original; }, 1800);
+    }).catch(() => {
+      alert('Número: ' + text);
+    });
+  }
+
+  // ---------- Abrir el sobre ----------
+  const envelope = document.getElementById('envelope');
+  const envScreen = document.getElementById('envelope-screen');
+  const invitation = document.getElementById('invitation');
+  const musicToggle = document.getElementById('music-toggle');
+  let opened = false;
+
+  function openInvitation(){
+    if (opened) return;
+    opened = true;
+    envelope.classList.add('open');
+    setTimeout(() => {
+      envScreen.classList.add('hidden');
+      invitation.classList.add('show');
+      musicToggle.classList.add('show');
+      startMelody();
+    }, 700);
+  }
+  envelope.addEventListener('click', openInvitation);
+  envelope.addEventListener('keypress', (e) => { if (e.key === 'Enter' || e.key === ' ') openInvitation(); });
+
+  // ---------- Confirmación de asistencia vía WhatsApp ----------
+  // Número por defecto que recibe las confirmaciones: código de país (505) + número, sin +, sin espacios
+  const WHATSAPP_NUMBER = "50583538223";
+
+  document.getElementById('rsvpSubmit').addEventListener('click', () => {
+    const name = document.getElementById('rsvpName').value.trim();
+    const attending = document.getElementById('rsvpAttending').value;
+    const message = document.getElementById('rsvpMessage').value.trim();
+
+    if (!name) {
+      document.getElementById('rsvpName').focus();
+      return;
+    }
+
+    let text = 'Confirmación de asistencia — Boda Romario & Nicole\n\n';
+    text += 'Nombre: ' + name + '\n';
+    text += 'Asistencia: ' + attending + '\n';
+    if (message) text += 'Mensaje: ' + message + '\n';
+
+    window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + encodeURIComponent(text), '_blank');
+  });
+
+  // ---------- Agregar al calendario ----------
+  // Hora y lugar — actualiza aquí si cambian
+  const WEDDING_LOCATION = 'Hotel Contempo';
+  const WEDDING_START_LOCAL = '20270121T160000'; // 4:00 PM
+  const WEDDING_END_LOCAL = '20270121T233000';   // 11:30 PM aprox.
+
+  function addToGoogleCalendar(){
+    const url = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent('Boda de Romario & Nicole')}&dates=${WEDDING_START_LOCAL}/${WEDDING_END_LOCAL}&ctz=America/Managua&details=${encodeURIComponent('¡Nos casamos! Ceremonia y recepción en Hotel Contempo.')}&location=${encodeURIComponent(WEDDING_LOCATION)}`;
+    window.open(url, '_blank');
+  }
+
+  function downloadICS(){
+    const dtStamp = new Date().toISOString().replace(/[-:]/g,'').split('.')[0] + 'Z';
+    const ics = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'BEGIN:VEVENT',
+      `UID:${Date.now()}@romario-nicole-boda`,
+      `DTSTAMP:${dtStamp}`,
+      `DTSTART;TZID=America/Managua:${WEDDING_START_LOCAL}`,
+      `DTEND;TZID=America/Managua:${WEDDING_END_LOCAL}`,
+      'SUMMARY:Boda de Romario & Nicole',
+      'DESCRIPTION:¡Nos casamos! Ceremonia y recepción en Hotel Contempo.',
+      `LOCATION:${WEDDING_LOCATION}`,
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+    const blob = new Blob([ics], { type: 'text/calendar' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = 'boda-romario-nicole.ics';
+    link.click();
+  }
+
+  ['googleCalBtn2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => { e.preventDefault(); addToGoogleCalendar(); });
+  });
+  ['icsBtn2'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('click', (e) => { e.preventDefault(); downloadICS(); });
+  });
+
+  // ---------- Mini calendario (enero 2027) ----------
+  function buildMiniCalendar(){
+    const year = 2027, month = 0, highlightDay = 21; // month 0-indexed: 0 = enero
+    const dowNames = ['Lu','Ma','Mi','Ju','Vi','Sá','Do'];
+    const grid = document.getElementById('minicalGrid');
+    dowNames.forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'dow';
+      el.textContent = d;
+      grid.appendChild(el);
+    });
+    const firstDay = new Date(year, month, 1);
+    const startOffset = (firstDay.getDay() + 6) % 7; // lunes=0
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+    for (let i = 0; i < startOffset; i++) {
+      const empty = document.createElement('div');
+      grid.appendChild(empty);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+      const el = document.createElement('div');
+      const isHighlight = d === highlightDay;
+      el.className = 'day' + (isHighlight ? ' highlight' : '');
+      if (isHighlight) {
+        el.innerHTML = `<span class="heart-icon"><svg viewBox="0 0 24 24"><path fill="#B4903F" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg></span><span class="heart-num">${d}</span>`;
+      } else {
+        el.textContent = d;
+      }
+      grid.appendChild(el);
+    }
+  }
+  buildMiniCalendar();
+
+  // ---------- Galería de fotos con visor ----------
+  // Para cambiar o agregar fotos, edita esta lista (en el orden en que deben aparecer).
+  // Se muestran en un carrusel que avanza solo; al tocar una foto se abre ampliada.
+  const GALLERY_PHOTOS = ['galeria-01.jpg', 'galeria-02.jpg', 'galeria-03.jpg', 'galeria-04.jpg', 'galeria-05.jpg', 'galeria-06.jpg', 'galeria-07.jpg', 'galeria-08.jpg', 'galeria-09.jpg', 'galeria-10.jpg', 'galeria-11.jpg', 'galeria-12.jpg', 'galeria-13.jpg', 'galeria-14.jpg', 'galeria-15.jpg', 'galeria-16.jpg', 'galeria-17.jpg', 'galeria-18.jpg'];
+  const CAROUSEL_AUTOPLAY_MS = 3500;   // segundos entre foto y foto (en milisegundos)
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let galleryPhotos = [], lbIndex = 0, lbToken = 0, lbOpener = null;
+  const lightbox = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lbImg');
+  const lbCount = document.getElementById('lbCount');
+  const lbPrev = document.getElementById('lbPrev');
+  const lbNext = document.getElementById('lbNext');
+
+  // ----- Carrusel -----
+  let carSlides = [], carDots = [], carActive = 0, carStep = 240;
+  let carTimer = null, carHold = false, carHover = false, carVisible = false, carSuppressClick = false, carLoaded = false;
+  const carViewport = document.getElementById('carViewport');
+  const carDotsBox = document.getElementById('carDots');
+
+  function initGallery(photos){
+    galleryPhotos = photos;
+    carViewport.innerHTML = '';
+    carDotsBox.innerHTML = '';
+    carSlides = []; carDots = []; carActive = 0; carLoaded = false;
+    const n = photos.length;
+    photos.forEach((src, i) => {
+      const slide = document.createElement('button');
+      slide.type = 'button';
+      slide.className = 'car-slide';
+      slide.setAttribute('aria-label', 'Foto ' + (i + 1) + ' de ' + n + ', tocar para ampliar');
+      const img = document.createElement('img');
+      img.dataset.src = src;          // se carga cuando la sección se acerca a la pantalla
+      img.alt = 'Romario y Nicole';
+      img.decoding = 'async';
+      img.draggable = false;
+      slide.appendChild(img);
+      slide.addEventListener('click', () => {
+        if (carSuppressClick) return;
+        if (i === carActive) openLightbox(i, slide); else carGo(i);
+      });
+      carViewport.appendChild(slide);
+      carSlides.push(slide);
+
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'car-dot';
+      dot.setAttribute('aria-label', 'Ir a la foto ' + (i + 1));
+      dot.addEventListener('click', () => carGo(i));
+      carDotsBox.appendChild(dot);
+      carDots.push(dot);
+    });
+    carMeasure();
+    carLayout(0);
+    carObserve();
+    carRestart();
+  }
+
+  function carMeasure(){
+    if (carSlides[0]) carStep = carSlides[0].offsetWidth * 0.9;
+  }
+
+  // Posiciona cada foto según su distancia a la foto activa (con vuelta circular)
+  function carLayout(dx){
+    const n = carSlides.length;
+    carSlides.forEach((el, i) => {
+      let d = ((i - carActive) % n + n) % n;
+      if (d > n / 2) d -= n;
+      const fd = d + dx / carStep;
+      const a = Math.abs(fd);
+      const near = Math.abs(d) <= 2;
+      el.style.transform = 'translateX(' + (d * carStep + dx) + 'px) scale(' + (1 - 0.12 * Math.min(1, a)) + ')';
+      el.style.opacity = near ? Math.max(0, 1 - 0.28 * a) : 0;
+      el.style.zIndex = 10 - Math.min(9, Math.abs(d));
+      el.style.pointerEvents = Math.abs(d) <= 1 ? 'auto' : 'none';
+      el.tabIndex = d === 0 ? 0 : -1;
+    });
+    carDots.forEach((dot, i) => dot.classList.toggle('on', i === carActive));
+  }
+
+  function carGo(i){
+    const n = carSlides.length;
+    if (!n) return;
+    carActive = ((i % n) + n) % n;
+    carLayout(0);
+    carRestart();
+  }
+
+  function carPaused(){
+    return carHold || carHover || !carVisible || document.hidden || lightbox.classList.contains('open');
+  }
+
+  function carRestart(){
+    clearInterval(carTimer);
+    if (reduceMotion || carSlides.length < 2) return;
+    carTimer = setInterval(() => { if (!carPaused()) carGo(carActive + 1); }, CAROUSEL_AUTOPLAY_MS);
+  }
+
+  function carLoadImages(){
+    if (carLoaded) return;
+    carLoaded = true;
+    carSlides.forEach(s => { const img = s.firstChild; if (img.dataset.src) img.src = img.dataset.src; });
+  }
+
+  function carObserve(){
+    if (!('IntersectionObserver' in window)) { carLoadImages(); carVisible = true; return; }
+    new IntersectionObserver((entries) => { if (entries[0].isIntersecting) carLoadImages(); }, { rootMargin: '900px 0px' }).observe(carViewport);
+    new IntersectionObserver((entries) => { carVisible = entries[0].isIntersecting; }, { threshold: 0.4 }).observe(carViewport);
+  }
+
+  // Arrastrar con el dedo o el mouse (el carrusel se detiene mientras tanto)
+  let dragX = 0, dragDx = 0, dragMoved = false, dragT0 = 0;
+  carViewport.addEventListener('pointerdown', (e) => {
+    if (e.pointerType === 'mouse' && e.button !== 0) return;
+    dragX = e.clientX; dragDx = 0; dragMoved = false; dragT0 = performance.now();
+    carHold = true;
+    window.addEventListener('pointermove', carDragMove);
+    window.addEventListener('pointerup', carDragEnd);
+    window.addEventListener('pointercancel', carDragCancel);
+  });
+  function carDragMove(e){
+    const dx = e.clientX - dragX;
+    if (!dragMoved && Math.abs(dx) > 6) { dragMoved = true; carViewport.classList.add('dragging'); }
+    if (dragMoved) { dragDx = dx; carLayout(dx); }
+  }
+  function carDragStop(){
+    window.removeEventListener('pointermove', carDragMove);
+    window.removeEventListener('pointerup', carDragEnd);
+    window.removeEventListener('pointercancel', carDragCancel);
+    carViewport.classList.remove('dragging');
+    carHold = false;
+  }
+  function carDragEnd(){
+    carDragStop();
+    if (dragMoved) {
+      carSuppressClick = true;
+      setTimeout(() => { carSuppressClick = false; }, 60);
+      const velocity = dragDx / Math.max(1, performance.now() - dragT0);
+      if (Math.abs(dragDx) > carStep * 0.25 || (Math.abs(dragDx) > 24 && Math.abs(velocity) > 0.4)) carGo(carActive + (dragDx < 0 ? 1 : -1));
+      else carLayout(0);
+    }
+    carRestart();
+  }
+  function carDragCancel(){
+    carDragStop();
+    if (dragMoved) carLayout(0);
+    carRestart();
+  }
+
+  // Pausa con el mouse encima (solo computadora; en celular no aplica)
+  carViewport.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') carHover = true; });
+  carViewport.addEventListener('pointerleave', () => { carHover = false; });
+  carViewport.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowLeft') carGo(carActive - 1);
+    else if (e.key === 'ArrowRight') carGo(carActive + 1);
+  });
+  document.getElementById('carPrev').addEventListener('click', () => carGo(carActive - 1));
+  document.getElementById('carNext').addEventListener('click', () => carGo(carActive + 1));
+  window.addEventListener('resize', () => { carMeasure(); carLayout(0); });
+
+  function showPhoto(i){
+    const n = galleryPhotos.length;
+    lbIndex = (i + n) % n;
+    const token = ++lbToken;
+    lbImg.classList.remove('loaded');
+    lbImg.onload = () => { if (token === lbToken) lbImg.classList.add('loaded'); };
+    lbImg.src = galleryPhotos[lbIndex];
+    lbImg.alt = 'Foto ' + (lbIndex + 1) + ' de ' + n;
+    lbCount.textContent = (lbIndex + 1) + ' / ' + n;
+    const single = n <= 1;
+    lbPrev.style.display = single ? 'none' : 'flex';
+    lbNext.style.display = single ? 'none' : 'flex';
+    // Precarga de las fotos vecinas para que el cambio sea inmediato
+    [lbIndex + 1, lbIndex - 1].forEach(k => { new Image().src = galleryPhotos[(k + n) % n]; });
+  }
+
+  function openLightbox(i, opener){
+    lbOpener = opener || null;
+    lightbox.classList.add('open');
+    lightbox.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('lb-lock');
+    showPhoto(i);
+    document.getElementById('lbClose').focus();
+  }
+
+  function closeLightbox(){
+    lightbox.classList.remove('open');
+    lightbox.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('lb-lock');
+    lbImg.removeAttribute('src');
+    carGo(lbIndex);
+    const back = carSlides[carActive] || lbOpener;
+    if (back) back.focus({ preventScroll: true });
+  }
+
+  document.getElementById('lbClose').addEventListener('click', closeLightbox);
+  lbPrev.addEventListener('click', () => showPhoto(lbIndex - 1));
+  lbNext.addEventListener('click', () => showPhoto(lbIndex + 1));
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox || e.target === document.getElementById('lbStage')) closeLightbox();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (!lightbox.classList.contains('open')) return;
+    if (e.key === 'Escape') closeLightbox();
+    else if (e.key === 'ArrowLeft') showPhoto(lbIndex - 1);
+    else if (e.key === 'ArrowRight') showPhoto(lbIndex + 1);
+  });
+
+  // Deslizar con el dedo para pasar de foto
+  let touchX = null;
+  lightbox.addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  lightbox.addEventListener('touchend', (e) => {
+    if (touchX === null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 50) showPhoto(lbIndex + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  initGallery(GALLERY_PHOTOS);
+
+  // ---------- Cuenta regresiva ----------
+  const WEDDING_DATE = new Date('2027-01-21T16:00:00');
+  function tickCountdown(){
+    const now = new Date();
+    let diff = WEDDING_DATE - now;
+    if (diff < 0) diff = 0;
+    document.getElementById('cd-days').textContent = Math.floor(diff / 86400000);
+    document.getElementById('cd-hours').textContent = String(Math.floor((diff / 3600000) % 24)).padStart(2,'0');
+    document.getElementById('cd-min').textContent = String(Math.floor((diff / 60000) % 60)).padStart(2,'0');
+    document.getElementById('cd-sec').textContent = String(Math.floor((diff / 1000) % 60)).padStart(2,'0');
+  }
+  tickCountdown();
+  setInterval(tickCountdown, 1000);
+
+  // ---------- Melodía romántica generada (Tone.js, sin derechos de autor) ----------
+  let melodyStarted = false, isPlaying = false, pianoSynth, padSynth, pianoPart, padPart;
+
+  function buildMelody(){
+    pianoSynth = new Tone.PolySynth(Tone.Synth, {
+      oscillator:{ type:'triangle' },
+      envelope:{ attack:0.02, decay:0.3, sustain:0.25, release:1.4 }
+    }).toDestination();
+    pianoSynth.volume.value = -8;
+
+    padSynth = new Tone.PolySynth(Tone.Synth, {
+      oscillator:{ type:'sine' },
+      envelope:{ attack:0.8, decay:0.5, sustain:0.6, release:2.5 }
+    }).toDestination();
+    padSynth.volume.value = -18;
+
+    const reverb = new Tone.Reverb({ decay:3.2, wet:0.35 }).toDestination();
+    pianoSynth.connect(reverb);
+    padSynth.connect(reverb);
+
+    const melody = [
+      { t:'0:0', n:'E4', d:'4n' }, { t:'0:1', n:'G4', d:'4n' },
+      { t:'0:2', n:'A4', d:'4n' }, { t:'0:3', n:'G4', d:'8n' },
+      { t:'1:0', n:'C5', d:'2n' }, { t:'1:2', n:'B4', d:'4n' },
+      { t:'1:3', n:'A4', d:'8n' }, { t:'2:0', n:'G4', d:'4n' },
+      { t:'2:1', n:'E4', d:'4n' }, { t:'2:2', n:'F4', d:'4n' },
+      { t:'2:3', n:'G4', d:'8n' }, { t:'3:0', n:'A4', d:'2n' },
+      { t:'3:2', n:'G4', d:'4n' }, { t:'3:3', n:'E4', d:'8n' },
+    ];
+    const chords = [
+      { t:'0:0', n:['C3','E3','G3'], d:'1m' },
+      { t:'1:0', n:['A2','C3','E3'], d:'1m' },
+      { t:'2:0', n:['F2','A2','C3'], d:'1m' },
+      { t:'3:0', n:['G2','B2','D3'], d:'1m' },
+    ];
+
+    pianoPart = new Tone.Part((time, ev) => pianoSynth.triggerAttackRelease(ev.n, ev.d, time), melody).start(0);
+    pianoPart.loop = true; pianoPart.loopEnd = '4m';
+
+    padPart = new Tone.Part((time, ev) => padSynth.triggerAttackRelease(ev.n, ev.d, time), chords).start(0);
+    padPart.loop = true; padPart.loopEnd = '4m';
+
+    Tone.Transport.bpm.value = 72;
+  }
+
+  async function startMelody(){
+    if (melodyStarted) return;
+    melodyStarted = true;
+    await Tone.start();
+    buildMelody();
+    Tone.Transport.start();
+    isPlaying = true;
+    musicToggle.classList.remove('paused');
+  }
+
+  musicToggle.addEventListener('click', async () => {
+    if (!melodyStarted) { await startMelody(); return; }
+    if (isPlaying) {
+      Tone.Transport.pause();
+      isPlaying = false;
+      musicToggle.classList.add('paused');
+    } else {
+      Tone.Transport.start();
+      isPlaying = true;
+      musicToggle.classList.remove('paused');
+    }
+  });
+</script>
+</body>
+</html>
